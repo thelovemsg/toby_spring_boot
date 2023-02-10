@@ -2,6 +2,7 @@ package tobyspring.helloboot;
 
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
@@ -27,39 +28,11 @@ public class HellobootApplication {
 		return new DispatcherServlet();
 	}
 
-	//빈 생성을 위한 Factory Method
-	/*@Bean
-	public HelloController helloController(HelloService helloService) {
-		return new HelloController(helloService);
+	public static void main(String[] args) {
+		SpringApplication.run(HellobootApplication.class, args);
 	}
 
-	//빈 생성을 위한 Factory Method
-	@Bean
-	public HelloService helloService() {
-		return new SimpleHelloService();
-	}*/
 
-	public static void main(String[] args) throws LifecycleException {
-		AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext(){
-			@Override
-			protected void onRefresh() {
-				super.onRefresh();
-
-				ServletWebServerFactory serverFactory = this.getBean(ServletWebServerFactory.class);
-				DispatcherServlet dispatcherServlet = this.getBean(DispatcherServlet.class);
-				//dispatcherServlet.setApplicationContext(this); // spring container 주입
-
-				WebServer webServer = serverFactory.getWebServer(servletContext -> {
-					servletContext.addServlet("dispatcherServlet", dispatcherServlet
-						).addMapping("/*");
-				});
-				webServer.start();
-
-			}
-		};
-		applicationContext.register(HellobootApplication.class);
-		applicationContext.refresh();
-	}
 }
 
 
